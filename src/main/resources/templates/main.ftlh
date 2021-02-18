@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="position-relative">
-        <ul class="list-group list-group-flush chat-messages p-4">
+        <ul id="messageList" class="list-group list-group-flush chat-messages p-4">
             <#list messages as message>
                 <#if sec.name != message.authorName>
                     <div class="card my-3 chat-message-left pb-4">
@@ -22,7 +22,7 @@
                             <i>${message.tag}</i>
                         </div>
                         <div class="card-footer text-muted">
-                            ${message.authorName} ${sec.name}
+                            ${message.authorName}
                         </div>
                     </div>
                 <#else>
@@ -35,7 +35,7 @@
                             <i>${message.tag}</i>
                         </div>
                         <div class="card-footer text-muted">
-                            ${message.authorName} ${sec.name}
+                            ${message.authorName}
                         </div>
                     </div>
                 </#if>
@@ -43,39 +43,31 @@
                 No message
             </#list>
         </ul>
-    </div>
-
-    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false"
-       aria-controls="collapseExample" onclick="connect();">
-        Add new message
-    </a>
-    <div class="collapse" id="collapseExample">
         <div class="form-group mt-3">
-            <form enctype="multipart/form-data">
-                <div class="form-group">
-                    <input id="messageText" type="text" name="text" placeholder="Add message" class="form-control"/>
+            <div class="form-group">
+                <input id="messageText" type="text" name="text" placeholder="Add message" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <input id="tag" type="text" name="tag" placeholder="Tag" class="form-control">
+            </div>
+            <div class="form-group">
+                <div class="custom-file">
+                    <input type="file" name="file" class="custom-file-input" id="validatedCustomFile">
+                    <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
                 </div>
-                <div class="form-group">
-                    <input id="tag" type="text" name="tag" placeholder="Tag" class="form-control">
-                </div>
-                <div class="form-group">
-                    <div class="custom-file">
-                        <input type="file" name="file" class="custom-file-input" id="validatedCustomFile">
-                        <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary" onclick="sendMessage();">Send</button>
-                </div>
-                <input id="from" type="hidden" value="${sec.name}">
-                <input type="hidden" name="_csrf" value="${_csrf.token}">
-            </form>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" onclick="sendMessage();">Send</button>
+            </div>
+            <input id="currentUser" type="hidden" value="${sec.name}">
+            <input type="hidden" name="_csrf" value="${_csrf.token}">
         </div>
     </div>
+
     <script type="text/javascript">
         document.querySelector('.custom-file-input').addEventListener('change', function (e) {
-            var fileName = document.getElementById("validatedCustomFile").files[0].name;
-            var nextSibling = e.target.nextElementSibling;
+            let fileName = document.getElementById("validatedCustomFile").files[0].name;
+            let nextSibling = e.target.nextElementSibling;
             nextSibling.innerText = fileName
         })
     </script>

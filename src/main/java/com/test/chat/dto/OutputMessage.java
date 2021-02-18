@@ -1,12 +1,24 @@
 package com.test.chat.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.test.chat.domain.User;
+import lombok.*;
 
-@Data
+import java.time.LocalDateTime;
+
+@Setter
+@Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class OutputMessage {
-    private String from;
+    private Integer id;
+
     private String text;
-    private String time;
+
+    private String tag;
+
+    private String filename;
+
+    private LocalDateTime date;
+
+    private User author;
 }

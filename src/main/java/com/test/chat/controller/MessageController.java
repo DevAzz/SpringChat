@@ -1,7 +1,10 @@
 package com.test.chat.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.chat.domain.User;
 import com.test.chat.dto.MessageDto;
+import com.test.chat.dto.OutputMessage;
 import com.test.chat.service.api.MessageService;
 import lombok.AllArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -18,10 +21,12 @@ public class MessageController {
 
     private final MessageService messageService;
 
+    private final ObjectMapper mapper;
+
     @MessageMapping("/chat")
     @SendTo("/topic/messages")
-    public void send(Principal principal, MessageDto messageDto) {
-        messageService.addMessage(getUserByPrincipal(principal), messageDto);
+    public OutputMessage send(Principal principal, MessageDto messageDto) {
+        return messageService.addMessage(getUserByPrincipal(principal), messageDto);
     }
 
     private User getUserByPrincipal(Principal principal) {
