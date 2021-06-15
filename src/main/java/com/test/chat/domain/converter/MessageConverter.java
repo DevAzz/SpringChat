@@ -17,7 +17,6 @@ public class MessageConverter {
             result.setDate(entity.getDate());
             result.setFilename(entity.getFilename());
             result.setId(entity.getId());
-            result.setTag(entity.getTag());
             result.setText(entity.getText());
         }
         return result;

@@ -1,7 +1,5 @@
 package com.test.chat.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.chat.domain.User;
 import com.test.chat.dto.MessageDto;
 import com.test.chat.dto.OutputMessage;
@@ -20,8 +18,6 @@ import java.util.Optional;
 public class MessageController {
 
     private final MessageService messageService;
-
-    private final ObjectMapper mapper;
 
     @MessageMapping("/chat")
     @SendTo("/topic/messages")

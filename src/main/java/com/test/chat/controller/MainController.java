@@ -2,7 +2,7 @@ package com.test.chat.controller;
 
 import com.test.chat.domain.MessageEntity;
 import com.test.chat.repository.MessageRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +12,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+@AllArgsConstructor
 @Controller
 public class MainController {
 
-    @Autowired
-    private MessageRepo messageRepo;
+    private final MessageRepo messageRepo;
 
     @GetMapping("/")
     public String greeting(Map<String, Object> model) {
@@ -24,12 +24,12 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public String main(@RequestParam(required = false, defaultValue = "") String filter,
-                       Model model) {
+    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
         List<MessageEntity> messages;
 
+        //TODO Загрузка по скроллу
         if(filter == null || !filter.isBlank()) {
-            messages = messageRepo.findByTag(filter);
+            messages = messageRepo.findByText(filter);
         } else {
             messages = messageRepo.findAll();
         }

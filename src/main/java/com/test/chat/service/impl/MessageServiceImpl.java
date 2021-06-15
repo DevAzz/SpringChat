@@ -30,7 +30,7 @@ public class MessageServiceImpl  implements MessageService {
 
     @Override
     public OutputMessage addMessage(User author, MessageDto dto) {
-        MessageEntity message = messageRepo.save(new MessageEntity(dto.getText(), dto.getTag(), author, LocalDateTime.now()));
+        MessageEntity message = messageRepo.save(new MessageEntity(dto.getText(), author, LocalDateTime.now()));
         if (dto.getFileContent() != null && !dto.getFileContent().isEmpty()) {
             Matcher matcher = FILE_PATTERN.matcher(dto.getFileContent());
             if (matcher.find()) {

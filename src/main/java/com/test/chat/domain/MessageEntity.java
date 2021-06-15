@@ -18,8 +18,6 @@ public class MessageEntity {
 
     private String text;
 
-    private String tag;
-
     private String filename;
 
     private LocalDateTime date;
@@ -28,9 +26,8 @@ public class MessageEntity {
     @JoinColumn(name = "user_id")
     private User author;
 
-    public MessageEntity(String text, String tag, User author, LocalDateTime date) {
+    public MessageEntity(String text, User author, LocalDateTime date) {
         this.text = text;
-        this.tag = tag;
         this.author = author;
         this.date = date;
     }

@@ -14,8 +14,6 @@ public class OutputMessage {
 
     private String text;
 
-    private String tag;
-
     private String filename;
 
     private LocalDateTime date;

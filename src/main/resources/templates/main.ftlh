@@ -4,7 +4,7 @@
     <div class="form-row">
         <div class="form-group col-md-6">
             <form method="get" action="/main" class="form-inline">
-                <input type="text" name="filter" class="form-control" value="${filter!}" placeholder="Search by tag">
+                <input type="text" name="filter" class="form-control" value="${filter!}" placeholder="Search">
                 <button type="submit" class="btn btn-primary ml-2">Search</button>
             </form>
         </div>
@@ -15,11 +15,14 @@
                 <#if sec.name != message.authorName>
                     <div class="card my-3 chat-message-left pb-4">
                         <#if message.filename??>
-                            <img src="/img/${message.filename}" class="card-img-top">
+                            <div class="thumbnail">
+                                <a href="/img/${message.filename}">
+                                    <img src="/img/${message.filename}" alt="Image" class="img-responsive" width="250" height="250">
+                                </a>
+                            </div>
                         </#if>
                         <div class="m-2">
                             <span>${message.text}</span>
-                            <i>${message.tag}</i>
                         </div>
                         <div class="card-footer text-muted">
                             ${message.authorName}
@@ -28,11 +31,14 @@
                 <#else>
                     <div class="card my-3 chat-message-right pb-4">
                         <#if message.filename??>
-                            <img src="/img/${message.filename}" class="card-img-top">
+                            <div class="thumbnail">
+                                <a href="/img/${message.filename}">
+                                    <img src="/img/${message.filename}" alt="Image" class="img-responsive" width="250" height="250">
+                                </a>
+                            </div>
                         </#if>
                         <div class="m-2">
                             <span>${message.text}</span>
-                            <i>${message.tag}</i>
                         </div>
                         <div class="card-footer text-muted">
                             ${message.authorName}
@@ -46,9 +52,6 @@
         <div class="form-group mt-3">
             <div class="form-group">
                 <input id="messageText" type="text" name="text" placeholder="Add message" class="form-control"/>
-            </div>
-            <div class="form-group">
-                <input id="tag" type="text" name="tag" placeholder="Tag" class="form-control">
             </div>
             <div class="form-group">
                 <div class="custom-file">
