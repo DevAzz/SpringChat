@@ -12,7 +12,7 @@ function init() {
     stompClient.connect({}, onConnect);
 }
 
-function showMessage(outputMessage) {
+async function showMessage(outputMessage) {
     if (outputMessage !== undefined && outputMessage !== null) {
         let messageList = document.getElementById('messageList');
         if (messageList.childNodes.length === 1 && messageList.childNodes[0].nodeType === Node.TEXT_NODE) {
@@ -36,10 +36,23 @@ function showMessage(outputMessage) {
         messageFooter.appendChild(document.createTextNode(outputMessage.author.username));
 
         if (outputMessage.filename !== undefined && outputMessage.filename !== null) {
-            let messageFile = document.createElement('img');
-            messageFile.src = '/img/' + outputMessage.filename;
-            messageFile.classList.add('card-img-top')
-            messageBlock.appendChild(messageFile);
+            let thumbnailBlock = document.createElement('div');
+            thumbnailBlock.classList.add('thumbnail');
+
+            let aBlock = document.createElement('a');
+            aBlock.href = '/img/' + outputMessage.filename;
+
+            let imageBlock = document.createElement('img');
+            imageBlock.src = '/img/' + outputMessage.filename;
+            imageBlock.alt = 'Image';
+            imageBlock.classList.add('img-responsive');
+            imageBlock.width = 250;
+            imageBlock.heigth = 250;
+
+            aBlock.appendChild(imageBlock);
+            thumbnailBlock.appendChild(aBlock);
+
+            messageBlock.appendChild(thumbnailBlock);
         }
 
         messageBlock.appendChild(messageText);

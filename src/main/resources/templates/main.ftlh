@@ -16,8 +16,8 @@
                     <div class="card my-3 chat-message-left pb-4">
                         <#if message.filename??>
                             <div class="thumbnail">
-                                <a href="/img/${message.filename}">
-                                    <img src="/img/${message.filename}" alt="Image" class="img-responsive" width="250" height="250">
+                                <a id="fullPath" href="/img/${message.filename}">
+                                    <img id="imageBox" src="/img/${message.filename}" alt="Image" class="img-responsive" width="250" height="250">
                                 </a>
                             </div>
                         </#if>
