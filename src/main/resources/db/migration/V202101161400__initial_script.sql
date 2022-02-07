@@ -11,7 +11,7 @@ create table usr
 alter table usr
     owner to postgres;
 
-create table messageDto
+create table message
 (
     id       integer not null
         constraint message_pkey
@@ -23,10 +23,10 @@ create table messageDto
     date date
 );
 
-alter table messageDto
+alter table message
     owner to postgres;
 
-alter table messageDto
+alter table message
     add constraint fk_user_user_id
         foreign key (user_id) references usr;
 

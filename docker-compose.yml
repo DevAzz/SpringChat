@@ -1,0 +1,66 @@
+version: '3.6'
+networks:
+  chat-network:
+    driver: bridge
+    enable_ipv6: false
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.2.0/24
+
+services:
+  app:
+    container_name: app
+    hostname: spring_chat
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/chat
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+    build:
+      context: .
+      args:
+        JAR_FILE: target/com.test.chat-1.0-SNAPSHOT.jar
+    deploy:
+      resources:
+        limits:
+          cpus: '0.7'
+          memory: 256M
+      restart_policy:
+        condition: none
+      placement:
+        constraints:
+          - node.labels.type == service
+    labels:
+      filebeat: "springboot"
+    volumes:
+      - file-storage:/opt/file-storage
+    ports:
+      - 8080:8080
+    networks:
+      chat-network:
+        aliases:
+          - chat-01
+
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    volumes:
+      - ./src/main/resources/db/create.db.sql:/docker-entrypoint-initdb.d/create.db.sql
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    networks:
+      chat-network:
+        aliases:
+          - db-01
+volumes:
+  file-storage:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /opt/share/chat/file-storage
