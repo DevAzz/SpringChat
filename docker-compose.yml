@@ -13,7 +13,8 @@ services:
     container_name: app
     hostname: spring_chat
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/chat
       - SPRING_DATASOURCE_USERNAME=postgres
@@ -22,6 +23,7 @@ services:
       context: .
       args:
         JAR_FILE: target/com.test.chat-1.0-SNAPSHOT.jar
+    entrypoint: ["sh", "-c", "sleep 2 && exec java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8 -jar app.jar"]
     deploy:
       resources:
         limits:
@@ -46,21 +48,25 @@ services:
   db:
     image: 'postgres:13.1-alpine'
     container_name: db
-    volumes:
-      - ./src/main/resources/db/create.db.sql:/docker-entrypoint-initdb.d/create.db.sql
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=chat
     ports:
       - "5432:5432"
     networks:
       chat-network:
         aliases:
           - db-01
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 volumes:
   file-storage:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: /opt/share/chat/file-storage
+      device: ./file-storage

@@ -3,7 +3,8 @@ package com.test.chat.controller;
 import com.test.chat.domain.Role;
 import com.test.chat.domain.User;
 import com.test.chat.repository.UserRepo;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,11 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.Collections;
 import java.util.Map;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Controller
 public class RegistrationController {
 
     private final UserRepo userRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/registration")
     public String registration() {
@@ -31,6 +33,7 @@ public class RegistrationController {
         }
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepo.save(user);
         return "redirect:/login";
     }

@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 @Service
 public class MessageServiceImpl  implements MessageService {
 
-    private static final Pattern FILE_PATTERN = Pattern.compile("^(data:.*;base64,)(.*)$");
+    static final Pattern FILE_PATTERN = Pattern.compile("^(data:.*;base64,)(.*)$");
 
     private final MessageRepo messageRepo;
 
