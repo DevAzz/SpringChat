@@ -55,13 +55,22 @@ public class JwtService {
                 .getSubject();
     }
 
+    @SuppressWarnings("unchecked")
     public Set<String> getRolesFromToken(String token) {
-        return Jwts.parser()
+        Object rolesObj = Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .get("roles", Set.class);
+                .get("roles");
+        
+        if (rolesObj instanceof Set) {
+            return (Set<String>) rolesObj;
+        }
+        
+        // Если это List, преобразуем в Set
+        java.util.List<String> rolesList = (java.util.List<String>) rolesObj;
+        return new java.util.HashSet<>(rolesList);
     }
 
     public boolean validateToken(String token) {
