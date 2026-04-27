@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.UUID;
 import java.util.regex.Matcher;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,8 +44,11 @@ class MessageServiceImplTest {
 
     @BeforeEach
     void setUp() {
+        UUID userId = UUID.randomUUID();
+        UUID messageId = UUID.randomUUID();
+
         testUser = new User();
-        testUser.setId(1L);
+        testUser.setId(userId);
         testUser.setUsername("testuser");
         testUser.setPassword("password");
         testUser.setActive(true);
@@ -61,7 +65,7 @@ class MessageServiceImplTest {
         fileDto.setFileContent("data:image/png;base64," + base64Content);
 
         savedMessageEntity = new MessageEntity("saved text", testUser, LocalDateTime.now());
-        savedMessageEntity.setId(1);
+        savedMessageEntity.setId(messageId);
         savedMessageEntity.setFilename(null);
     }
 
@@ -74,14 +78,17 @@ class MessageServiceImplTest {
         @DisplayName("Должна сохранить сообщение с текстом и вернуть OutputMessage")
         void addMessage_WithTextOnly_ShouldSaveAndReturnMessage() {
             // Arrange
-            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedMessageEntity);
+            UUID savedId = UUID.randomUUID();
+            MessageEntity savedEntity = new MessageEntity("saved text", testUser, LocalDateTime.now());
+            savedEntity.setId(savedId);
+            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedEntity);
 
             // Act
             var result = messageService.addMessage(testUser, textOnlyDto);
 
             // Assert
             assertNotNull(result);
-            assertEquals(1, result.getId());
+            assertEquals(savedId, result.getId());
             assertEquals("saved text", result.getText());
             assertEquals(testUser, result.getAuthor());
             assertNull(result.getFilename());
@@ -95,7 +102,10 @@ class MessageServiceImplTest {
         void addMessage_WithNullText_ShouldSaveAndReturnMessage() {
             // Arrange
             textOnlyDto.setText(null);
-            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedMessageEntity);
+            UUID savedId = UUID.randomUUID();
+            MessageEntity savedEntity = new MessageEntity("saved text", testUser, LocalDateTime.now());
+            savedEntity.setId(savedId);
+            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedEntity);
 
             // Act
             var result = messageService.addMessage(testUser, textOnlyDto);
@@ -110,7 +120,10 @@ class MessageServiceImplTest {
         void addMessage_WithEmptyText_ShouldSaveAndReturnMessage() {
             // Arrange
             textOnlyDto.setText("");
-            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedMessageEntity);
+            UUID savedId = UUID.randomUUID();
+            MessageEntity savedEntity = new MessageEntity("saved text", testUser, LocalDateTime.now());
+            savedEntity.setId(savedId);
+            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedEntity);
 
             // Act
             var result = messageService.addMessage(testUser, textOnlyDto);
@@ -131,8 +144,9 @@ class MessageServiceImplTest {
         void addMessage_WithValidBase64File_ShouldSaveMessageAndCallStorage() {
             // Arrange
             String fullPath = "2024/1/15/10/test.png";
+            UUID savedId = UUID.randomUUID();
             MessageEntity savedWithFile = new MessageEntity("saved text", testUser, LocalDateTime.now());
-            savedWithFile.setId(1);
+            savedWithFile.setId(savedId);
             savedWithFile.setFilename(fullPath);
 
             when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedWithFile);
@@ -161,8 +175,9 @@ class MessageServiceImplTest {
             pdfDto.setFileContent("data:application/pdf;base64," + base64Content);
 
             String fullPath = "2024/1/15/10/document.pdf";
+            UUID savedId = UUID.randomUUID();
             MessageEntity savedWithFile = new MessageEntity("saved text", testUser, LocalDateTime.now());
-            savedWithFile.setId(1);
+            savedWithFile.setId(savedId);
             savedWithFile.setFilename(fullPath);
 
             when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedWithFile);
@@ -183,7 +198,10 @@ class MessageServiceImplTest {
         void addMessage_WithInvalidBase64Format_ShouldNotCallStorage() {
             // Arrange
             fileDto.setFileContent("not-a-base64-string");
-            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedMessageEntity);
+            UUID savedId = UUID.randomUUID();
+            MessageEntity savedEntity = new MessageEntity("saved text", testUser, LocalDateTime.now());
+            savedEntity.setId(savedId);
+            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedEntity);
 
             // Act
             var result = messageService.addMessage(testUser, fileDto);
@@ -199,7 +217,10 @@ class MessageServiceImplTest {
         void addMessage_WithEmptyFileContent_ShouldNotCallStorage() {
             // Arrange
             fileDto.setFileContent("");
-            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedMessageEntity);
+            UUID savedId = UUID.randomUUID();
+            MessageEntity savedEntity = new MessageEntity("saved text", testUser, LocalDateTime.now());
+            savedEntity.setId(savedId);
+            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedEntity);
 
             // Act
             var result = messageService.addMessage(testUser, fileDto);
@@ -220,7 +241,10 @@ class MessageServiceImplTest {
         @DisplayName("Должна обработить null author")
         void addMessage_WithNullAuthor_ShouldHandleGracefully() {
             // Arrange
-            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedMessageEntity);
+            UUID savedId = UUID.randomUUID();
+            MessageEntity savedEntity = new MessageEntity("saved text", testUser, LocalDateTime.now());
+            savedEntity.setId(savedId);
+            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedEntity);
 
             // Act
             var result = messageService.addMessage(null, textOnlyDto);
@@ -243,7 +267,10 @@ class MessageServiceImplTest {
         void addMessage_WithNullFileContent_ShouldNotCallStorage() {
             // Arrange
             fileDto.setFileContent(null);
-            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedMessageEntity);
+            UUID savedId = UUID.randomUUID();
+            MessageEntity savedEntity = new MessageEntity("saved text", testUser, LocalDateTime.now());
+            savedEntity.setId(savedId);
+            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedEntity);
 
             // Act
             var result = messageService.addMessage(testUser, fileDto);
@@ -258,7 +285,10 @@ class MessageServiceImplTest {
         @DisplayName("Должна выбросить исключение при ошибке fileStorageService")
         void addMessage_WhenFileStorageFails_ShouldPropagateException() {
             // Arrange
-            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedMessageEntity);
+            UUID savedId = UUID.randomUUID();
+            MessageEntity savedEntity = new MessageEntity("saved text", testUser, LocalDateTime.now());
+            savedEntity.setId(savedId);
+            when(messageRepo.save(any(MessageEntity.class))).thenReturn(savedEntity);
             when(fileStorageService.saveFile(any(InputStream.class), anyString()))
                     .thenThrow(new RuntimeException("Storage error"));
 
@@ -271,6 +301,9 @@ class MessageServiceImplTest {
         @DisplayName("Должна выбросить исключение при ошибке messageRepo")
         void addMessage_WhenRepoFails_ShouldPropagateException() {
             // Arrange
+            UUID savedId = UUID.randomUUID();
+            MessageEntity savedEntity = new MessageEntity("saved text", testUser, LocalDateTime.now());
+            savedEntity.setId(savedId);
             when(messageRepo.save(any(MessageEntity.class)))
                     .thenThrow(new RuntimeException("DB error"));
 

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Controller
@@ -30,8 +31,9 @@ public class UserController {
         return "userList";
     }
 
-    @GetMapping("{user}")
-    public String userEditForm(@PathVariable User user, Model model) {
+    @GetMapping("{userId}")
+    public String userEditForm(@PathVariable UUID userId, Model model) {
+        User user = userRepo.findById(userId).orElseThrow();
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
         return "userEdit";
@@ -41,7 +43,8 @@ public class UserController {
     public String userSave(
             @RequestParam String username,
             @RequestParam Map<String, String> form,
-            @RequestParam("userId") User user) {
+            @RequestParam("userId") UUID userId) {
+        User user = userRepo.findById(userId).orElse(new User());
         user.setUsername(username);
         Set<String> roles = Arrays.stream(Role.values())
                 .map(Role::name)

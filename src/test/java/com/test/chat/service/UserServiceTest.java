@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -33,8 +34,9 @@ class UserServiceTest {
     @Test
     void loadUserByUsername_shouldReturnUser_whenUsernameExists() {
         // given
+        UUID testId = UUID.randomUUID();
         User expectedUser = new User();
-        expectedUser.setId(1L);
+        expectedUser.setId(testId);
         expectedUser.setUsername("testuser");
         expectedUser.setPassword("password");
         expectedUser.setActive(true);
@@ -86,8 +88,9 @@ class UserServiceTest {
     @Test
     void loadUserByUsername_shouldReturnInactiveUser() {
         // given
+        UUID testId = UUID.randomUUID();
         User inactiveUser = new User();
-        inactiveUser.setId(1L);
+        inactiveUser.setId(testId);
         inactiveUser.setUsername("inactiveuser");
         inactiveUser.setPassword("password");
         inactiveUser.setActive(false);
@@ -107,8 +110,9 @@ class UserServiceTest {
     @Test
     void loadUserByUsername_shouldReturnUserWithAdminRole() {
         // given
+        UUID testId = UUID.randomUUID();
         User adminUser = new User();
-        adminUser.setId(1L);
+        adminUser.setId(testId);
         adminUser.setUsername("admin");
         adminUser.setPassword("password");
         adminUser.setActive(true);
@@ -128,8 +132,9 @@ class UserServiceTest {
     @Test
     void loadUserByUsername_shouldReturnUserWithMultipleRoles() {
         // given
+        UUID testId = UUID.randomUUID();
         User user = new User();
-        user.setId(1L);
+        user.setId(testId);
         user.setUsername("multirole");
         user.setPassword("password");
         user.setActive(true);
@@ -149,8 +154,9 @@ class UserServiceTest {
     @Test
     void loadUserByUsername_shouldVerifyUsernameNotCalledWithEmptyString() {
         // given
+        UUID testId = UUID.randomUUID();
         User user = new User();
-        user.setId(1L);
+        user.setId(testId);
         user.setUsername("");
         user.setPassword("password");
         user.setActive(true);

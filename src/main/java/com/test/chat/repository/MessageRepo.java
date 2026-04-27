@@ -5,8 +5,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
+import java.util.UUID;
 
-public interface MessageRepo extends CrudRepository<MessageEntity, Integer> {
+public interface MessageRepo extends CrudRepository<MessageEntity, UUID> {
     List<MessageEntity> findByText(String text);
 
     @NonNull
