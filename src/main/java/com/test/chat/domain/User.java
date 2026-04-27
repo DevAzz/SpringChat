@@ -20,6 +20,10 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    // Дополнительный numeric ID для JWT токенов
+    @Column(unique = true, nullable = false, updatable = false)
+    private Long internalId;
+
     private String username;
 
     private String password;
@@ -59,5 +63,4 @@ public class User implements UserDetails {
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);
     }
-
 }

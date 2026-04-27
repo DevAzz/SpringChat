@@ -16,12 +16,11 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        UserDetails user = userRepo.findByUsername(s);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        com.test.chat.domain.User user = userRepo.findByUsername(username);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with username: " + s);
+            throw new UsernameNotFoundException("User not found with username: " + username);
         }
-        return user;
+        return new CustomUserDetails(user);
     }
 }
-
