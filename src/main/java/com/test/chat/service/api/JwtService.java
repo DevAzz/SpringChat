@@ -46,15 +46,6 @@ public class JwtService {
                 .get("userId", Long.class);
     }
 
-    public String getUsernameFromToken(String token) {
-        return Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
-    }
-
     @SuppressWarnings("unchecked")
     public Set<String> getRolesFromToken(String token) {
         Object rolesObj = Jwts.parser()
